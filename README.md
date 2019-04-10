@@ -1,0 +1,48 @@
+PKSpop
+==============
+
+A pipeline to predict type I PKSs protein order in polyketide biosynthetic assembly lines.
+
+
+PKSpop comprises three main steps to infer protein order: 1) Identify class memberships for query docking domains and align the sequences; 2) Pair each class I Ndd with all class I Cdds and use Ouroboros to predict the interaction probability for each pair. The probabilities are filled into a matrix; 3) Infer the protein order by a greedy probability matrix-filling method which takes the assembly line constraints and compatibility class into account.
+
+# Run PKSpop
+```
+python PKSpop/code/run_analysis.py input_json_file.json
+```
+
+# Input
+The input of PKSpop is a JSON file which contains following informaion:
+* gbk_path: path where the antiSMASH ```.gbk``` file of the query PKS gene cluster
+* protein_id: list of identifiers of query proteins whose order will be predicted
+* id_category: the category of the protein identifiers: "gene", "protein_id" or "locus_tag"
+* result_path: path where result will be saved
+* Ouroboros_path: path to Ouroboros repositry
+* Ouroboros_int_frac: list of ```int_frac``` parameter of Ouroboros with default ```[0.9, 0.8]```. It is recommended to add number below 0.8 if there are more than 10 query proteins.
+* n_repeat: number of repeat time to run Ouroboros with each ```int_frac``` parameter
+An example can be found in ```data/test```
+
+# Output
+The prediction results are in ```result_path/output/```
+* prediction_result.txt gives the predicted order
+* int_prob_mtx.csv is the pairwise interaction probabilities matrix of query proteins predicted by Ouroboros
+* int_prob_mtx.png show the interaction probabilities matrix
+
+Additional files used in prediction process:
+* dd_raw.fasta is the raw sequences extracted from the input ```.gbk``` file
+* dd_class_*.fasta is the sequences pf 3 compatibility classes
+* dd_hmmscan_oupt.txt is the result of hmmscan, which contains the class information of the sequences
+* dd_class_1_aln.afa is the aligned class 1 sequences
+* dd_class_1.afa is the conserved region on the aligned sequences
+* dd_class_1_paired.afa is the paired sequences of all query proteins
+* dd_class_1_ouro_inpt.fasta is the fasta file that input into Ouroboros
+* Ouroboros_class_1_ouro_inpt_*_soft_warm_* is the Ouroboros' output 
+
+# License
+This project is licensed under the BSD-3 license. See the LICENSE file for details.
+
+# Requirements
+Following tools should be installed/downloaded before running PKSpop:
+* [Ouroboros](https://github.com/miguelcorrea/Ouroboros)
+* [HMMER](https://hmmer.org)
+

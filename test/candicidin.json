@@ -1,0 +1,18 @@
+{
+  "gbk_path": "PATH/PKSpop/test/candicidin.gbk",
+  "protein_id": [
+    "fscA",
+    "fscB",
+    "fscC",
+    "fscF",
+    "fscE",
+    "fscD"
+  ],
+  "id_category": "gene",
+  "result_path": "PATH/test_PKSpop",
+  "Ouroboros_path": "PATH/Ouroboros",
+  "Ouroboros_int_frac": [
+    0.9, 0.8
+  ],
+  "n_repeat": 3
+}
