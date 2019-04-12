@@ -4,7 +4,10 @@ PKSpop
 A pipeline to predict type I PKSs protein order in polyketide biosynthetic assembly lines.
 
 
-PKSpop comprises three main steps to infer protein order: 1) Identify class memberships for query docking domains and align the sequences; 2) Pair each class I Ndd with all class I Cdds and use Ouroboros to predict the interaction probability for each pair. The probabilities are filled into a matrix; 3) Infer the protein order by a greedy probability matrix-filling method which takes the assembly line constraints and compatibility class into account.
+PKSpop comprises three main steps to infer protein order: 
+1. Identify class memberships for query docking domains and align the sequences
+2. Pair each class I Ndd with all class I Cdds and use Ouroboros to predict the interaction probability for each pair. The probabilities are filled into a matrix
+3. Infer the protein order by a greedy probability matrix-filling method which takes the assembly line constraints and compatibility class into account.
 
 # Run PKSpop
 ```
@@ -42,7 +45,8 @@ Additional files used in prediction process:
 This project is licensed under the BSD-3 license. See the LICENSE file for details.
 
 # Requirements
-Following tools should be installed/downloaded before running PKSpop:
+PKSpop requires Python 3.6+. The following tools should be installed/downloaded before running PKSpop:
 * [Ouroboros](https://github.com/miguelcorrea/Ouroboros)
 * [HMMER](https://hmmer.org)
+ 
 
