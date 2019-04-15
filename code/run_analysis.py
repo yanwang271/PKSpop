@@ -19,7 +19,6 @@ import query_seq
 import Ouroboros_analysis
 import int_prob
 import predict
-import cut_residues
 
 
 def parse_input(inpt_path):
