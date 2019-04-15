@@ -60,12 +60,12 @@ if __name__ == "__main__":
     msa.clustering(info_dict)
     msa.msa(info_dict)
 
-    # Pair the query sequences and intergrate them with the interacting
+    # Pair the query sequences and integrate them with the interacting
     # sequences and extra sequences to perform Ouroboros analysis
     query_seq.prepare_query_fl(info_dict)
     print(info_dict)
 
-    # Run Ourorboros analysis with user-defined parameters and find
+    # Run Ouroboros analysis with user-defined parameters and find
     # the result with the best LLH
     Ouroboros_analysis.ouroboros_analysis(info_dict)
     print(info_dict)
