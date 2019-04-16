@@ -19,7 +19,6 @@ import query_seq
 import Ouroboros_analysis
 import int_prob
 import predict
-import cut_residues
 
 
 def parse_input(inpt_path):
@@ -46,7 +45,7 @@ if __name__ == "__main__":
     info_dict = parse_input(argv[1])
     result_path = info_dict['result_path']
     if os.path.exists(result_path):
-        raise FileExistsError(f"Output path {output_path} already exists")
+        raise FileExistsError(f"Output path {result_path} already exists")
     else:
         os.mkdir(result_path)
         pred_oupt_path = f'{result_path}/output'
@@ -64,19 +63,15 @@ if __name__ == "__main__":
     # Pair the query sequences and intergrate them with the interacting
     # sequences and extra sequences to perform Ouroboros analysis
     query_seq.prepare_query_fl(info_dict)
-    print(info_dict)
 
     # Run Ourorboros analysis with user-defined parameters and find
     # the result with the best LLH
     Ouroboros_analysis.ouroboros_analysis(info_dict)
-    print(info_dict)
 
     # matrix and plot the matrix
     info_dict['output_path'] = pred_oupt_path
     int_prob.prob_mtx(info_dict)
-    print(info_dict)
 
     # Predict the protein order according to interaction probability,
     # start/end protein, protein class
     predict.predict_order(info_dict)
-    print(info_dict)
