@@ -18,8 +18,8 @@ def clustering(info_dict):
     pro_ls = info_dict['protein_id']
         
     print(f'Clustering sequence...')
-    c_class_seq = cluster_seq(c_seq,'PKSpop/data/hmm_profile/c_groups_hmmpf')
-    n_class_seq = cluster_seq(n_seq,'PKSpop/data/hmm_profile/n_groups_hmmpf')
+    c_class_seq = cluster_seq(c_seq,'../data/hmm_profile/c_groups_hmmpf')
+    n_class_seq = cluster_seq(n_seq,'../data/hmm_profile/n_groups_hmmpf')
     
     for pro in pro_ls:
         if pro not in c_class_seq:
@@ -93,8 +93,8 @@ def msa(info_dict):
     c_align = c_inpt.replace('.fasta','_aln.afa')
     n_align = n_inpt.replace('.fasta','_aln.afa')
     print(f'Aligning sequences...')
-    run_hmmalign(c_align, 'PKSpop/data/hmm_profile/c_group_1.hmm', c_inpt)
-    run_hmmalign(n_align, 'PKSpop/data/hmm_profile/n_group_1.hmm', n_inpt)
+    run_hmmalign(c_align, '../data/hmm_profile/c_group_1.hmm', c_inpt)
+    run_hmmalign(n_align, '../data/hmm_profile/n_group_1.hmm', n_inpt)
     ### Identify the cutting position and cut the sequence
     c_start, c_end = find_cut_position(c_align)
     c_cut_fl = cut_seq(c_align, c_start, c_end)
@@ -126,7 +126,7 @@ def add_position_helper(seq_fl, c_n):
     '''
     Add a already cut sequence to help locate the cutting position
     '''
-    pos_seq = open('PKSpop/data/hmm_profile/positioning_helper.fasta')
+    pos_seq = open('../data/hmm_profile/positioning_helper.fasta')
     record = list(SeqIO.parse(pos_seq, 'fasta'))
     with open(seq_fl,'a') as seq:
         if c_n == 'c':
@@ -222,7 +222,7 @@ def group_seq_fasta(group, query_fl):
 def wether_predict(info_dict):
     '''
     Stop the prediction if there are more than one start/end protein in
-    the assemly line
+    the assembly line
     '''
     start_pro = info_dict['start_pro']
     if len(start_pro) > 1:
