@@ -245,7 +245,7 @@ def wether_conflict(pair_ls, pair):
         pair_ls_ = pair_ls[:]
         loop = wether_loop(pair_ls_, pair)
         return loop
-        
+
 def wether_loop(pair_ls, pair):
     c, n = pair
     c_ls = [i[0] for i in pair_ls]
@@ -288,7 +288,7 @@ def next_check(pair_ls, new_c, new_n, i, j):
             pair_ls.remove(rm1)
             pair_ls.remove(rm2)
             loop = wether_loop(pair_ls, new_pair)
-            return loop
+            return loop        
 
 def assemble_line(pair_ls):
     '''
