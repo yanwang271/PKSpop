@@ -110,6 +110,7 @@ def predict_order(info_dict):
             res_fl.write(pred_order+'\n')
     else:
         res_fl.write('No prediction')
+        print('No prediction')
     res_fl.close()
 
 
@@ -230,7 +231,6 @@ def wether_conflict(pair_ls, pair):
     '''
     c_ls = []
     n_ls = []
-    
     c, n = pair
     for p in pair_ls:
         c_ls.append(p[0])
@@ -243,9 +243,54 @@ def wether_conflict(pair_ls, pair):
     elif n in n_ls:
         return True
     else:
+        pair_ls_ = pair_ls[:]
+        loop = wether_loop(pair_ls_, pair)
+        return loop
+        
+def wether_loop(pair_ls, pair):
+    c, n = pair
+    c_ls = [i[0] for i in pair_ls]
+    n_ls = [i[1] for i in pair_ls]
+    length = len(c_ls)
+    
+    if c in c_ls and n in n_ls:
+        for i in range(length):
+            if c in c_ls[i]:
+                new_c = n_ls[i]
+                break
+        for j in range(length):
+            if n in n_ls[j]:
+                new_n = c_ls[j]
+                break
+        return next_check(pair_ls, new_c, new_n, i, j)        
+    
+    if c in n_ls and n in c_ls:
+        for i in range(length):
+            if c in n_ls[i]:
+                new_n = c_ls[i]
+                break
+        for j in range(length):
+            if n in c_ls[j]:
+                new_c = n_ls[j]
+                break
+        return next_check(pair_ls, new_c, new_n, i, j)        
+    else:
         return False
+        
+def next_check(pair_ls, new_c, new_n, i, j):
+        new_pair = (new_c, new_n)
+        if new_pair in pair_ls:
+            return True
+        elif new_c == new_n:
+            return True
+        else:
+            rm1 = pair_ls[i]
+            rm2 = pair_ls[j]
+            pair_ls.remove(rm1)
+            pair_ls.remove(rm2)
+            loop = wether_loop(pair_ls, new_pair)
+            return loop
 
-                
 def assemble_line(pair_ls):
     '''
     Assemble the line from the predicted interacting protein pairs
