@@ -224,7 +224,6 @@ def set_list_of_list(ls):
             res_ls.append(item)
     return res_ls
     
-               
 def wether_conflict(pair_ls, pair):
     '''
     Judge wether the pair is conflict with the pairs in pair_ls
