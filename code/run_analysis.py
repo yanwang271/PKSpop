@@ -71,7 +71,7 @@ if __name__ == "__main__":
     # matrix and plot the matrix
     info_dict['output_path'] = pred_oupt_path
     int_prob.prob_mtx(info_dict)
-
+    
     # Predict the protein order according to interaction probability,
     # start/end protein, protein class
     predict.predict_order(info_dict)

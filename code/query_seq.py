@@ -18,12 +18,12 @@ def prepare_query_fl(info_dict):
     
     c_pair_fa, n_pair_fa = pairing_seq(c_fa, n_fa)
     
-    c_inter_fa = '../data/dd_seq/c_group1.afa'
-    c_extra_fa = '../data/dd_seq/c_group1_extra.afa'
+    c_inter_fa = 'PKSpop/data/dd_seq/c_group1.afa'
+    c_extra_fa = 'PKSpop/data/dd_seq/c_group1_extra.afa'
     c_query_fl = integrate_fl(c_inter_fa, c_extra_fa, c_pair_fa)
     
-    n_inter_fa = '../data/dd_seq/n_group1.afa'
-    n_extra_fa = '../data/dd_seq/n_group1_extra.afa'
+    n_inter_fa = 'PKSpop/data/dd_seq/n_group1.afa'
+    n_extra_fa = 'PKSpop/data/dd_seq/n_group1_extra.afa'
     n_query_fl = integrate_fl(n_inter_fa, n_extra_fa, n_pair_fa)
     
     info_dict.update({'c_query_path':c_query_fl, 'n_query_path':n_query_fl})

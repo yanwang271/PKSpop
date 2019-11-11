@@ -4,15 +4,9 @@
 Generate pairwise interaction probability matrix
 """
 
-# Allows plotting without an X server
-import matplotlib as mpl
-mpl.use('Agg')
-
 from pandas import DataFrame as df
 from Bio import SeqIO
-import matplotlib.pyplot as plt
 import numpy as np
-import seaborn as sns
 import subprocess
 import os
 import json
@@ -36,7 +30,6 @@ def prob_mtx(info_dict):
     n_pro = pro_inpt_order(query_n)
 
     prob_mtx = create_prob_mtx(probs, c_pro, n_pro, pro_ls, output_dir)
-    prob_mtx_heatmap(prob_mtx, output_dir)
 
     other_class_c = find_other_class(pro_ls, c_pro, end_pro)
     other_class_n = find_other_class(pro_ls, n_pro, start_pro)
@@ -86,26 +79,6 @@ def create_prob_mtx(probs, c_pro, n_pro, pro_ls, output_dir):
         prob_mtx.loc[c_term][n_term] = probs[i]
     prob_mtx.to_csv(path_or_buf=f'{output_dir}/int_prob_mtx.csv')
     return prob_mtx
-
-
-def prob_mtx_heatmap(prob_mtx, output_dir):
-    '''
-    Generate interaction probability heatmap
-    '''
-    prob_mtx = prob_mtx.astype(np.float64).apply(np.log10)
-    prob_mtx = prob_mtx.applymap(minus)
-    sns.set()
-
-    fig, ax = plt.subplots(figsize=(5, 5))
-    ax = sns.heatmap(prob_mtx, cmap="YlGnBu", annot=True,
-                     annot_kws={'size': 10}, ax=ax)
-    fig.savefig(f'{output_dir}/int_prob_mtx.png')
-
-
-def minus(val):
-    '''
-    '''
-    return 0 - val
 
 
 def find_other_class(all_pro, class1_pro, start_end):

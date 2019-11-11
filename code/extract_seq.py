@@ -40,9 +40,21 @@ def extract_seq(info_dict):
     gbk_fl = open(gbk_path)
     record = list(SeqIO.parse(gbk_fl, 'genbank'))[0]
     
+    tool = 'antismash'
+    for f in record.features:
+        if f.type == 'subregion':
+            if 'mibig' in f.qualifiers['aStool']:
+                tool = 'mibig'
+                break
+    
     for pro in pro_ls:
         print(f'Extracting sequences from {pro}...')
-        c_seq, n_seq = find_dd(pro, record, id_category)
+        
+        if tool == 'antismash':
+            c_seq, n_seq = find_dd(pro, record, id_category)
+        elif tool == 'mibig':
+            c_seq, n_seq = find_dd_mibig(pro, record, id_category)
+
         if c_seq == 'end' and n_seq == 'start':
             warnings.warn(f'{pro} do not have c and n term docking domain, \
             cannot place it into the assembly line.')
@@ -88,16 +100,17 @@ def find_dd(pro, record, id_category):
                             last_sec = sec_met[sec_met.index(sec)-1]
                             if 'NRPS/PKS subtype' in last_sec or \
                                'Docking' in last_sec:
-                                ks_start, ks_end = parse_loc(sec_info)
+                                ks_start, ks_end = parse_loc(sec_info[3])
                                 #if ks_start >= 26:
-                                n_seq = f.qualifiers['translation']\
-                                        [0][:ks_start]
+                                if ks_start > 0:
+                                    n_seq = f.qualifiers['translation']\
+                                            [0][:ks_start]
                         ### Find c_term docking domain
                         if 'ACP' in sec_info[2]:
                             try:
                                 next_sec = sec_met[sec_met.index(sec)+1]
                                 if 'Docking' in next_sec:
-                                    acp_start, acp_end = parse_loc(sec_info)
+                                    acp_start, acp_end = parse_loc(sec_info[3])
                                     c_seq = f.qualifiers['translation']\
                                             [0][acp_end:]
                                 elif 'Thioesterase' in next_sec:
@@ -105,18 +118,73 @@ def find_dd(pro, record, id_category):
                                 else:
                                     continue
                             except IndexError:
-                                acp_start, acp_end = parse_loc(sec_info)
+                                acp_start, acp_end = parse_loc(sec_info[3])
                                 c_seq = f.qualifiers['translation']\
                                         [0][acp_end:]
         
-    return c_seq, n_seq
+                return c_seq, n_seq
 
-
-def parse_loc(sec_info):
+def find_dd_mibig(pro, record, id_category):
+    '''
+    Find n and c-term docking domain sequences on a protein in mibig gbk file
+    '''
+    n_seq = 'start'
+    c_seq = 'end'
+    for f in record.features:
+        if f.type == 'CDS':
+            try:
+                f.qualifiers[id_category]
+            except KeyError:
+                continue
+            if pro in f.qualifiers[id_category]:
+                sec_met = f.qualifiers['NRPS_PKS']
+                sec_met = [i for i in sec_met if 'Domain' in i]
+                for sec in sec_met:
+                    sec_info = sec.split(' ')
+                    
+                    ### Find n_term docking domain
+                    if 'PKS_KS' in sec_info[1]:
+                        if sec_met.index(sec) == 0:
+                            ks_start, ks_end = parse_loc(sec_info[2])
+                            #if ks_start >= 26:
+                            if ks_start > 0:
+                                n_seq = f.qualifiers['translation']\
+                                        [0][:ks_start]
+                        else:
+                            last_sec = sec_met[sec_met.index(sec)-1]
+                            if 'Docking' in last_sec:
+                                ks_start, ks_end = parse_loc(sec_info[2])
+                                #if ks_start >= 26:
+                                if ks_start > 0:
+                                    n_seq = f.qualifiers['translation']\
+                                            [0][:ks_start]
+                            else:
+                                continue                            
+                               
+                    ### Find c_term docking domain
+                    if 'ACP' in sec_info[1]:
+                        try:
+                            next_sec = sec_met[sec_met.index(sec)+1]
+                            if 'Docking' in next_sec:
+                                acp_start, acp_end = parse_loc(sec_info[2])
+                                c_seq = f.qualifiers['translation']\
+                                        [0][acp_end:]
+                            elif 'Thioesterase' in next_sec:
+                                c_seq = 'end'
+                            else:
+                                continue
+                        except IndexError:
+                            acp_start, acp_end = parse_loc(sec_info[2])
+                            c_seq = f.qualifiers['translation']\
+                                    [0][acp_end:]
+        
+                return c_seq, n_seq
+    
+def parse_loc(loc_info):
     '''
     '''
     start,end = list(map(int,\
-                sec_info[3].strip('.').strip('()').split('-')))
+                loc_info.strip('.').strip('()').split('-')))
     start = start
     end = end
     return start,end
