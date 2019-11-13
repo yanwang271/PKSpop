@@ -7,7 +7,7 @@ A pipeline to predict type I PKSs protein order in polyketide biosynthetic assem
 PKSpop comprises three main steps to infer protein order: 
 1. Identify class memberships for query docking domains and align the sequences
 2. Pair each class I Ndd with all class I Cdds and use Ouroboros to predict the interaction probability for each pair. The probabilities are filled into a matrix
-3. Infer the protein order by a greedy probability matrix-filling method which takes the assembly line constraints and compatibility class into account.
+3. Infer protein order from the probability matrix by the Hungarian algorithm, a global optimization method, which finds a match between Ndds and Cdds that maximizes the overall interaction probability. The inference method takes the assembly line constraints and compatibility class into account.
 
 ## Run PKSpop
 ```
