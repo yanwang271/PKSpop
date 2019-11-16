@@ -48,4 +48,10 @@ This project is licensed under the BSD-3 license. See the LICENSE file for detai
 PKSpop requires Python 3.6+. The following tools should be installed/downloaded before running PKSpop:
 * [Ouroboros](https://github.com/miguelcorrea/Ouroboros)
 * [HMMER](https://hmmer.org)
+Packages:
+* Biopython
+* NumPy
+* Pandas
+* SciPy
+
 
